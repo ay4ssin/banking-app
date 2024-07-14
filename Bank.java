@@ -32,6 +32,14 @@ public class Bank {
         return accounts.get(accountNumber);
     }
 
+    public boolean accountExists(String accountNumber) {
+        return accounts.containsKey(accountNumber);
+    }
+
+    public boolean accountExistsName(String name) {
+        return accounts.containsKey(name);
+    }
+
     /**
      *
      * @param accountNumber
