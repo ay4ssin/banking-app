@@ -3,6 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * TODO: add validation for all inputs
+ * TODO: add comments for all the methods
+ */
+
 public class GUI extends Main implements ActionListener {
     JFrame frame = new JFrame();
     JPanel panel = new JPanel();
@@ -34,9 +39,7 @@ public class GUI extends Main implements ActionListener {
             JFrame signupFrame = new JFrame();
             JPanel signup = new JPanel();
             JLabel nameLabel = new JLabel("Full Name");
-            JLabel depositNumber = new JLabel("Deposit");
             JTextField userName = new JTextField(20);
-            JTextField initialDeposit = new JTextField(20);
 
             signup.setBorder(BorderFactory.createEmptyBorder(80, 160, 80, 160));
             signup.setLayout(new GridLayout(3, 2));
@@ -47,35 +50,33 @@ public class GUI extends Main implements ActionListener {
             userName.setBounds(100,20,165,25);
             signup.add(userName);
 
-            depositNumber.setBounds(10,20,80,25);
-            signup.add(depositNumber);
-
-            initialDeposit.setBounds(100,20,165,25);
-            signup.add(initialDeposit);
+            JLabel success = new JLabel("");
+            success.setBounds(100,50,165,25);
 
             JButton signupButton = new JButton("Signup");
             signupButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    /* if (strawberry.accountExists(accountNum)) {
-                        JLabel blank = new JLabel("");
-                        blank.setBounds(100,50,165,25);
-                        login.add(blank);
-                        login.add(success);
-                        success.setForeground(Color.GREEN);
-                        success.setText("Successfully Logged In");
-                        mainGUI();
-                    } else {
-                        JLabel blank = new JLabel("");
-                        blank.setBounds(100,50,165,25);
-                        login.add(blank);
-                        login.add(success);
-                        success.setForeground(Color.RED);
-                        success.setText("Incorrect Details, Please try again");
-                    } */
+                    String user = userName.getText();
+                   if (strawberry.accountExistsByName(user)) {
+                       JLabel blank = new JLabel("");
+                       blank.setBounds(100,50,165,25);
+                       signup.add(blank);
+                       signup.add(success);
+                       success.setForeground(Color.RED);
+                       success.setText("Error: An Account Already Exists For this User, Please Try to Login Instead");
+                   } else {
+                       JLabel blank = new JLabel("");
+                       blank.setBounds(100,50,165,25);
+                       strawberry.createAccount(user);
+                       signup.add(blank);
+                       signup.add(success);
+                       success.setForeground(Color.GREEN);
+                       success.setText("Successfully Created An Account");
+                       mainGUI();
+                   }
                 }
             });
             signupButton.setBounds(10, 40, 40, 25);
-            signupButton.addActionListener(this);
             signup.add(signupButton);
 
             signupFrame.add(signup);
@@ -118,8 +119,9 @@ public class GUI extends Main implements ActionListener {
             loginButton.setBounds(10, 80, 80, 25);
             loginButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    String accountUser = userName.getText();
                     String accountNum = accountNumber.getText();
-                    if (strawberry.accountExists(accountNum)) {
+                    if (strawberry.accountExists(accountNum) && strawberry.accountExistsByName(accountUser)) {
                         JLabel blank = new JLabel("");
                         blank.setBounds(100,50,165,25);
                         login.add(blank);
